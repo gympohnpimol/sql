@@ -1,4 +1,4 @@
-s
+
 /*LEFT and RIGHT*/
 SELECT RIGHT(website,3) web, count(*) num
 FROM accounts
@@ -30,3 +30,67 @@ FROM accounts;
 SELECT LEFT(name, STRPOS(name, ' ')-1) first_name,
       RIGHT(name, LENGTH(name) - STRPOS(name, ' ')) last_name
 FROM sales_reps;
+
+/*CONCAT*/
+SELECT CONCAT(firstname,'.',lastname,'@',name,'.com') mail
+FROM (SELECT 
+LEFT(primary_poc, STRPOS(primary_poc, ' ')-1) firstname,
+RIGHT(primary_poc, LENGTH(primary_poc) - STRPOS(primary_poc, ' ')) lastname,
+name
+FROM accounts) t;
+
+WITH t1 AS (SELECT 
+LEFT(primary_poc, STRPOS(primary_poc, ' ')-1) firstname,
+RIGHT(primary_poc, LENGTH(primary_poc) - STRPOS(primary_poc, ' ')) lastname,
+name
+FROM accounts)
+
+SELECT CONCAT(firstname,'.',lastname,'@',name,'.com')
+FROM t1;
+
+WITH t2 AS (
+  SELECT LEFT(primary_poc, STRPOS(primary_poc, ' ')-1) firstname,
+  RIGHT(primary_poc, LENGTH(primary_poc) - STRPOS(primary_poc, ' ')) lastname, 
+  name
+  FROM accounts)
+
+SELECT 
+CONCAT(firstname,'.',lastname,'@',REPLACE(name,' ',''),'.com')
+FROM t2;
+
+WITH t3 AS(
+  SELECT LEFT(primary_poc, STRPOS(primary_poc, ' ')-1) firstname,
+  RIGHT(primary_poc, LENGTH(primary_poc)-STRPOS(primary_poc, ' ')) lastname,
+  name
+  FROM accounts)
+
+SELECT 
+LEFT(LOWER(firstname),1)||RIGHT(LOWER(firstname), 1)||LEFT(LOWER(lastname),1)||RIGHT(LOWER(lastname),1)||LENGTH(firstname)||LENGTH(lastname)||REPLACE(UPPER(name), ' ','')
+FROM t3;
+
+/*CAST*/
+SELECT date orig_date, (SUBSTR(date, 7, 4) || '-' || LEFT(date, 2) || '-' || SUBSTR(date, 4, 2))::DATE new_date FROM sf_crime_data; 
+
+/*COALESCE*/
+SELECT COALESCE(a.id, a.id) filled_id, a.name, a.website, a.lat, a.long, a.primary_poc, a.sales_rep_id, o.*
+FROM accounts a
+LEFT JOIN orders o
+ON a.id = o.account_id
+WHERE o.total IS NULL;
+
+SELECT COALESCE(a.id, a.id) filled_id, a.name, a.website, a.lat, a.long, a.primary_poc, a.sales_rep_id, COALESCE(o.account_id, a.id) account_id, o.occurred_at, o.standard_qty, o.gloss_qty, o.poster_qty, o.total, o.standard_amt_usd, o.gloss_amt_usd, o.poster_amt_usd, o.total_amt_usd
+FROM accounts a
+LEFT JOIN orders o
+ON a.id = o.account_id
+WHERE o.total IS NULL;
+
+SELECT COALESCE(a.id, a.id) filled_id, a.name, a.website, a.lat, a.long, a.primary_poc, a.sales_rep_id, COALESCE(o.account_id, a.id) account_id, o.occurred_at, COALESCE(o.standard_qty, 0) standard_qty, COALESCE(o.gloss_qty,0) gloss_qty, COALESCE(o.poster_qty,0) poster_qty, COALESCE(o.total,0) total, COALESCE(o.standard_amt_usd,0) standard_amt_usd, COALESCE(o.gloss_amt_usd,0) gloss_amt_usd, COALESCE(o.poster_amt_usd,0) poster_amt_usd, COALESCE(o.total_amt_usd,0) total_amt_usd
+FROM accounts a
+LEFT JOIN orders o
+ON a.id = o.account_id
+WHERE o.total IS NULL;
+
+SELECT COALESCE(a.id, a.id) filled_id, a.name, a.website, a.lat, a.long, a.primary_poc, a.sales_rep_id, COALESCE(o.account_id, a.id) account_id, o.occurred_at, COALESCE(o.standard_qty, 0) standard_qty, COALESCE(o.gloss_qty,0) gloss_qty, COALESCE(o.poster_qty,0) poster_qty, COALESCE(o.total,0) total, COALESCE(o.standard_amt_usd,0) standard_amt_usd, COALESCE(o.gloss_amt_usd,0) gloss_amt_usd, COALESCE(o.poster_amt_usd,0) poster_amt_usd, COALESCE(o.total_amt_usd,0) total_amt_usd
+FROM accounts a
+LEFT JOIN orders o
+ON a.id = o.account_id;
