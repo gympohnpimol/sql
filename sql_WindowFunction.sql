@@ -42,7 +42,7 @@ SELECT id,
        MAX(total_amt_usd) OVER main_window AS max_total_amt_usd
 FROM orders
 
-WINDOW main_window AS (PARTITION BY account_id ORDER BY DATE_TRUNC('year',occurred_at)) 
+WINDOW main_window AS (PARTITION BY account_id ORDER BY DATE_TRUNC('year',occurred_at))
 
 /*Comparing a Row to Previous Row*/
 SELECT account_id,
