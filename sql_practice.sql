@@ -38,4 +38,4 @@ WITH t AS(
 SELECT rating, 
 	count_rating,
 	count_rating/ CAST(total AS REAL) AS ratingPercentage
-FROM t ;
+FROM t ; 
