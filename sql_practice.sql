@@ -39,3 +39,23 @@ SELECT rating,
 	count_rating,
 	count_rating/ CAST(total AS REAL) AS ratingPercentage
 FROM t ; 
+
+SELECT 
+	rating,
+	COUNT(*) AS Total_count
+FROM film
+GROUP BY 1;
+
+SELECT
+	rating,
+	total_rating,
+	total_rating/CAST(total_count AS REAL) AS ratingPercent
+FROM(
+	SELECT 
+		rating,
+		COUNT(*) AS total_rating,
+		(SELECT COUNT(*) FROM film) AS total_count
+	FROM film
+GROUP BY rating
+)
+ORDER BY total_rating DESC;
