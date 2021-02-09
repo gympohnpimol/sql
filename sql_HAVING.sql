@@ -1,3 +1,4 @@
+
 "How many accounts have more than 20 orders?"
 SELECT a.id, a.name, COUNT(*) num 
 FROM account a 
