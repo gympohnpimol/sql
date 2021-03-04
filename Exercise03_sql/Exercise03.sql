@@ -41,3 +41,23 @@ LEFT JOIN Warehouses W
 ON W.Code = B.Warehouse 
 GROUP BY B.Warehouse 
 
+--3.9 Select the codes of all warehouses that are saturated 
+--(a warehouse is saturated if the number of boxes 
+--in it is larger than the warehouse's capacity).
+SELECT W.Code, COUNT(*) AS Cap
+FROM Boxes
+INNER JOIN Warehouses W
+ON W.Code = Boxes.Warehouse
+GROUP BY Boxes.Warehouse
+HAVING W.Capacity < Cap
+
+--3.10 Select the codes of all the boxes located in Chicago.
+SELECT Boxes.Code
+FROM Boxes
+INNER JOIN Warehouses
+ON Boxes.Warehouse = Warehouses.Code 
+WHERE Warehouses.Location = 'Chicaco'
+
+
+SELECT*FROM Warehouses
+SELECT*FROM Boxes
