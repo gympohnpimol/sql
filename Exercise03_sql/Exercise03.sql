@@ -58,6 +58,20 @@ INNER JOIN Warehouses
 ON Boxes.Warehouse = Warehouses.Code 
 WHERE Warehouses.Location = 'Chicaco'
 
+--3.11 Create a new warehouse in New York with a capacity for 3 boxes.
+INSERT INTO Warehouses(Location, Capacity) VALUES('New York', 3)
+
+--3.12 Create a new box, with code "H5RT", 
+--containing "Papers" with a value of $200, and located in warehouse 2.
+INSERT INTO Boxes(Code, Content, Value, Warehouse) VALUES('H5RT', 'Papers', 200, 2)
+
+--3.13 Reduce the value of all boxes by 15%.
+UPDATE Boxes SET Value = Value * 0.85
+
+--3.14 Apply a 20% value reduction to boxes 
+--with a value larger than the average value of all the boxes.
+UPDATE Boxes SET Value = Value * 0.8
+WHERE Value > (SELECT AVG(Value) FROM (SELECT * FROM Boxes) AS X)
 
 SELECT*FROM Warehouses
 SELECT*FROM Boxes
